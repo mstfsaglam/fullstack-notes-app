@@ -1,0 +1,25 @@
+### Get all notes
+GET http://localhost:3001/api/notes
+
+### Get single note
+GET http://localhost:3001/api/notes/1
+
+### Create note
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+    "content": "testing",
+    "important": false
+}
+
+### Update note
+PUT http://localhost:3001/api/notes/2
+Content-Type: application/json
+
+{
+    "important": "true"
+}
+
+### Delete note
+DELETE http://localhost:3001/api/notes/3
