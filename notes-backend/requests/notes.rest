@@ -2,7 +2,7 @@
 GET http://localhost:3001/api/notes
 
 ### Get single note
-GET http://localhost:3001/api/notes/1
+GET http://localhost:3001/api/notes/696d1d460582bdfb3436e846
 
 ### Create note
 POST http://localhost:3001/api/notes
