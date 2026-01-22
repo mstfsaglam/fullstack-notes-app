@@ -14,12 +14,13 @@ Content-Type: application/json
 }
 
 ### Update note
-PUT http://localhost:3001/api/notes/2
+PUT http://localhost:3001/api/notes/696f4290397481d00e9e5579
 Content-Type: application/json
 
 {
+    "content": "testing0",
     "important": "true"
 }
 
 ### Delete note
-DELETE http://localhost:3001/api/notes/3
+DELETE http://localhost:3001/api/notes/696f671108e4baba2d9f5e03
