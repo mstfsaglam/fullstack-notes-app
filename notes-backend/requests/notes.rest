@@ -9,8 +9,9 @@ POST http://localhost:3001/api/notes
 Content-Type: application/json
 
 {
-    "content": "testing",
-    "important": false
+    "content": "testing to the user id I",
+    "important": false,
+    "userId": "69934b9bdc27fcb774a2c108"
 }
 
 ### Update note
