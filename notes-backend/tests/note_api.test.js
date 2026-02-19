@@ -161,7 +161,6 @@ describe('when there is initially some notes saved', () => {
         .expect('Content-Type', /application\/json/)
 
       const usersAtEnd = await helper.usersInDb()
-      console.log(result.body.error)
       assert(result.body.error.includes('expected `username` to be unique'))
 
       assert.strictEqual(usersAtEnd.length, usersAtStart.length)
