@@ -66,9 +66,11 @@ describe('when there is initially some notes saved', () => {
 
   describe('addition of a new note', () => {
     test('succeeds with valid data', async () => {
+      const users = await helper.usersInDb()
       const newNote = {
         content: 'async/await simplifies making async calls',
-        important: true
+        important: true,
+        userId: users[0].id
       }
 
       await api
@@ -116,7 +118,7 @@ describe('when there is initially some notes saved', () => {
       await User.deleteMany({})
 
       const passwordHash = await bcrypt.hash('secret', 10)
-      const user = new User({ username: 'root', passwordHash })
+      const user = new User({ username: 'Root', passwordHash })
 
       await user.save()
     })
@@ -125,9 +127,9 @@ describe('when there is initially some notes saved', () => {
       const userAtStart = await helper.usersInDb()
 
       const newUser = {
-        username: 'mustafa',
+        username: 'Mustafa0',
         name: 'Mustafa S',
-        password: 'fullstack26',
+        password: 'Fullstack26*',
       }
 
       await api
@@ -147,9 +149,9 @@ describe('when there is initially some notes saved', () => {
       const usersAtStart = await helper.usersInDb()
 
       const newUser = {
-        username: 'root',
+        username: 'Root',
         name: 'Superuser',
-        password: 'fullstack26',
+        password: 'Fullstack26*',
       }
 
       const result = await api
@@ -159,6 +161,7 @@ describe('when there is initially some notes saved', () => {
         .expect('Content-Type', /application\/json/)
 
       const usersAtEnd = await helper.usersInDb()
+      console.log(result.body.error)
       assert(result.body.error.includes('expected `username` to be unique'))
 
       assert.strictEqual(usersAtEnd.length, usersAtStart.length)
