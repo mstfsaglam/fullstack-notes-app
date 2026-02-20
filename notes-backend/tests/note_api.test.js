@@ -67,14 +67,26 @@ describe('when there is initially some notes saved', () => {
   describe('addition of a new note', () => {
     test('succeeds with valid data', async () => {
       const users = await helper.usersInDb()
+      const user = users[0]
+
+      // login
+      const loginResponse = await api
+        .post('/api/login')
+        .send({
+          username: user.username,
+          password: 'secret'
+        })
+
+      const token = loginResponse.body.token
+
       const newNote = {
         content: 'async/await simplifies making async calls',
         important: true,
-        userId: users[0].id
       }
 
       await api
         .post('/api/notes')
+        .set('Authorization', `Bearer ${token}`)
         .send(newNote)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -87,9 +99,25 @@ describe('when there is initially some notes saved', () => {
     })
 
     test('fails with status code 400 if data invalid', async () => {
+      const users = await helper.usersInDb()
+      const user = users[0]
+      // login
+      const responseLogin = await api
+        .post('/api/login')
+        .send({
+          username: user.username,
+          password: 'secret'
+        })
+
+      const token = responseLogin.body.token
+
       const newNote = { important: true }
 
-      await api.post('/api/notes').send(newNote).expect(400)
+      await api
+        .post('/api/notes')
+        .set('Authorization', `Bearer ${token}`)
+        .send(newNote)
+        .expect(400)
 
       const notesAtEnd = await helper.notesInDb()
 
@@ -117,8 +145,9 @@ describe('when there is initially some notes saved', () => {
     beforeEach(async () => {
       await User.deleteMany({})
 
-      const passwordHash = await bcrypt.hash('secret', 10)
-      const user = new User({ username: 'Root', passwordHash })
+      const password = 'secret'
+      const passwordHash = await bcrypt.hash(password, 10)
+      const user = new User({ username: 'root', passwordHash })
 
       await user.save()
     })
@@ -149,7 +178,7 @@ describe('when there is initially some notes saved', () => {
       const usersAtStart = await helper.usersInDb()
 
       const newUser = {
-        username: 'Root',
+        username: 'root',
         name: 'Superuser',
         password: 'Fullstack26*',
       }

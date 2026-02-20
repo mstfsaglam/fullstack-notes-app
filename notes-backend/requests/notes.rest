@@ -7,6 +7,7 @@ GET http://localhost:3001/api/notes/696d1d460582bdfb3436e846
 ### Create note
 POST http://localhost:3001/api/notes
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im11c3RhZmEiLCJpZCI6IjY5OTc4NTJjOWE3MzNiNGNlMWM4NjhmNiIsImlhdCI6MTc3MTYxOTQxNX0.44nuE04uLHSdqSpTUJkdnIaxI4iyjQMaVQ23r39N0Zs
 
 {
     "content": "testing to the user id I",
