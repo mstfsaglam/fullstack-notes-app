@@ -22,6 +22,15 @@ const App = () => {
       })
   }, [])
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedNoteAppUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      noteService.setToken(user.token)
+    }
+  }, [])
+
   if(!notes) {
     return null;
   }
@@ -75,18 +84,27 @@ const App = () => {
     try {
       const user = await loginService.login({ username, password })
 
+      window.localStorage.setItem(
+        'loggedNoteAppUser', JSON.stringify(user)
+      )
+
       noteService.setToken(user.token)
       setUser(user)
-
       setUsername('')
       setPassword('')
     } catch {
       setErrorMessage('wrong credentials')
-      
+
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
     }
+  }
+
+  const handleLogout = () => {
+    window.localStorage.removeItem('loggedNoteAppUser')
+    noteService.setToken(null)
+    setUser(null)
   }
 
   const loginForm = () => (
@@ -114,7 +132,7 @@ const App = () => {
         <button type="submit">login</button>
       </form>
   )
-
+  
   const noteForm = () => (
     <form onSubmit={addNote}>
         <input value={newNote} onChange={handleNoteChange} />
@@ -130,7 +148,10 @@ const App = () => {
       {!user && loginForm()}
       {user && (
         <div>
-          <p>{user.name} logged in</p>
+          <p>
+            {user.name} logged in
+            <button onClick={() => handleLogout()}>logout</button>
+          </p>
           {noteForm()}
         </div>
       )}
