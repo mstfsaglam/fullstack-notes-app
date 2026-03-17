@@ -5,6 +5,7 @@ import Note from './components/Note'
 import Notification from './components/Notification.jsx'
 import Footer from './components/Footer.jsx'
 import LoginForm from './components/LoginForm.jsx'
+import NoteForm from './components/NoteForm.jsx'
 import Togglable from './components/Togglable.jsx'
 
 const App = () => {
@@ -109,7 +110,7 @@ const App = () => {
     setUser(null)
   }
 
-  const loginForm = () => {
+  const loginForm = () => (
     <Togglable buttonLabel="login">
       <LoginForm
         username={username}
@@ -119,13 +120,16 @@ const App = () => {
         handleSubmit={handleLogin}
       />
     </Togglable>
-  }
+  )
   
   const noteForm = () => (
-    <form onSubmit={addNote}>
-        <input value={newNote} onChange={handleNoteChange} />
-        <button type="submit">save</button>
-    </form>
+    <Togglable buttonLabel="new note">
+      <NoteForm
+        onSubmit={addNote}
+        value={newNote}
+        handleChange={handleNoteChange}
+      />
+    </Togglable>
   )
 
   return (
