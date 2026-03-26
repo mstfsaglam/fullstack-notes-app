@@ -9,12 +9,15 @@ import NoteForm from './components/NoteForm.jsx'
 import Togglable from './components/Togglable.jsx'
 
 const App = () => {
-  const [notes, setNotes] = useState(null);
-  const [showAll, setShowAll] = useState(true);
+  const [notes, setNotes] = useState(null)
+  const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState(null)
-  const [username, setUsername] = useState('') 
-  const [password, setPassword] = useState('') 
-  const [user, setUser] = useState(null)
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [user, setUser] = useState(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedNoteAppUser')
+    return loggedUserJSON ? JSON.parse(loggedUserJSON) : null
+  })
   const noteFormRef = useRef()
 
   useEffect(() => {
@@ -26,18 +29,15 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedNoteAppUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
+    if (user) {
       noteService.setToken(user.token)
     }
-  }, [])
+  }, [user])
 
   if(!notes) {
-    return null;
+    return null
   }
-  
+
   const addNote = (noteObject) => {
     noteService
       .create(noteObject)
@@ -48,8 +48,8 @@ const App = () => {
   }
 
   const toggleImportanceOf = (id) => {
-    const note = notes.find(n => n.id === id);
-    const changeNote = { ...note, important: !note.important };
+    const note = notes.find(n => n.id === id)
+    const changeNote = { ...note, important: !note.important }
 
     noteService
       .update(id, changeNote)
@@ -58,7 +58,7 @@ const App = () => {
       })
       .catch(() => {
         setErrorMessage(
-          `the note '${note.content}' was already deleted from server` 
+          `the note '${note.content}' was already deleted from server`
         )
         setTimeout(() => {
           setErrorMessage(null)
@@ -109,7 +109,7 @@ const App = () => {
       />
     </Togglable>
   )
-  
+
   const noteForm = () => (
     <Togglable buttonLabel="new note" ref={noteFormRef}>
       <NoteForm createNote={addNote} />
@@ -146,8 +146,8 @@ const App = () => {
             toggleImportance={() => toggleImportanceOf(note.id)} />
         )}
       </ul>
-      
-      <Footer />  
+
+      <Footer />
     </div>
   )
 }
