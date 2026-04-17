@@ -1,4 +1,5 @@
 const { test, expect, describe, beforeEach } = require('@playwright/test')
+const { loginWith } = require('./helper')
 
 describe('Note app', () => {
   beforeEach(async ({ page, request }) => {
@@ -21,18 +22,12 @@ describe('Note app', () => {
   })
 
   test('user can log in', async ({ page }) => {
-    await page.getByRole('button', { name: 'login' }).click()
-    await page.getByLabel('username').fill('mustafa')
-    await page.getByLabel('password').fill('Mustafa0*')
-    await page.getByRole('button', { name: 'login' }).click()
+    await loginWith(page, 'mustafa', 'Mustafa0*')
     await expect(page.getByText('mustafa logged in')).toBeVisible()
   })
 
   test('login fails with wrong password', async ({ page }) => {
-    await page.getByRole('button', { name: 'login' }).click()
-    await page.getByLabel('username').fill('mustafa')
-    await page.getByLabel('password').fill('Wrong1*')
-    await page.getByRole('button', { name: 'login' }).click()
+    await loginWith(page, 'mustafa', 'wrong')
 
     const errorDiv = page.locator('.error')
     await expect(errorDiv).toContainText('wrong credentials')
@@ -44,10 +39,7 @@ describe('Note app', () => {
 
   describe('when logged in', () => {
     beforeEach(async ({ page }) => {
-      await page.getByRole('button', { name: 'login' }).click()
-      await page.getByLabel('username').fill('mustafa')
-      await page.getByLabel('password').fill('Mustafa0*')
-      await page.getByRole('button', { name: 'login' }).click()
+      await loginWith(page, 'mustafa', 'Mustafa0*')
     })
 
     test('a new note can be created', async ({ page }) => {
@@ -61,7 +53,7 @@ describe('Note app', () => {
     describe('and a note exists', () => {
       beforeEach(async ({ page }) => {
         await page.getByRole('button', { name: 'new note' }).click()
-        await page.getByLabel('content').fill('another note by playwright ')
+        await page.getByLabel('content').fill('another note by playwright')
         await page.getByRole('button', { name: 'save' }).click()
       })
 
