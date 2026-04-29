@@ -59,7 +59,7 @@ describe('Note app', () => {
       })
     })
 
-    describe('and several notes exists', () => {
+    describe('and several notes exist', () => {
       beforeEach(async ({ page }) => {
         await createNote(page, 'first note')
         await createNote(page, 'second note')
@@ -67,6 +67,7 @@ describe('Note app', () => {
       })
 
       test('one of those can be made non important', async ({ page }) => {
+        await page.pause()
         const otherNoteText = page.getByText('second note')
         const otherNoteElement = otherNoteText.locator('..')
 
@@ -78,3 +79,25 @@ describe('Note app', () => {
   })
 
 })
+
+// test.only('debug notes', async ({ page, request }) => {
+//   test.setTimeout(30000)
+//   await request.post('http://localhost:3001/api/testing/reset')
+//   await request.post('http://localhost:3001/api/users', {
+//       data: {
+//         name: 'Mustafa',
+//         username: 'mustafa',
+//         password: 'Mustafa0*'
+//       }
+//     })
+//   await page.goto('/')
+//   await loginWith(page,'mustafa','Mustafa0*')
+
+//   await createNote(page,'first')
+//   await createNote(page,'second')
+//   await createNote(page,'third')
+
+//   await expect(
+//     page.getByText('third')
+//   ).toBeVisible()
+// })
